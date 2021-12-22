@@ -1,16 +1,35 @@
-# This is a sample Python script.
+import aiohttp
+import asyncio
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+url = "https://api.openweathermap.org/data/2.5/weather?id={}&lang=ru&appid=7821591e8b20bbefdb453db278b342cd"
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+async def main(city):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url.format(city["id"])) as response:
+            print("Status:", response.status)
+            print("Content-type:", response.headers['content-type'])
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+            html = await response.text()
+            file = open('{}.json'.format(city["name"]), 'w')
+            file.write(html)
+            file.close()
+
+
+city_list = [
+    {
+        "id": "1528675",
+        "name": "Bishkek"
+    }, {
+        "id": "524901",
+        "name": "Moskva"
+    }, {
+        "id": "1527534",
+        "name": "Osh"
+    },
+]
+
+loop = asyncio.get_event_loop()
+for city in city_list:
+    loop.run_until_complete(main(city))
+
