@@ -1,16 +1,105 @@
-# This is a sample Python script.
+class TicTacToe(object):
+    data = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ]
+    crosses = 'x'
+    zeros = '0'
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+    def restart(self):
+        self.data = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ]
+
+    def is_empty(self):
+        for row in self.data:
+            for cell in row:
+                if cell != '':
+                    return False
+        return True
+
+    def is_play(self):
+        return not self.is_empty()
+
+    def row_check(self, sim):
+        for row in self.data:
+            count = 0
+            for cell in row:
+                if cell == sim:
+                    count += 1
+            if count == 3:
+                return True
+        return False
+
+    def colum_check(self, sim):
+        for i in range(3):
+            count = 0
+            for row in self.data:
+                if row[i] == sim:
+                    count += 1
+            if count == 3:
+                return True
+        return False
+
+    def cross_check(self, sim):
+        data = self.data
+        if data[0][0] == sim and data[1][1] == sim and data[2][2] == sim:
+            return True
+        elif data[0][2] == sim and data[1][1] == sim and data[2][0] == sim:
+            return True
+        else:
+            return False
+
+    def get_image(self):
+        return """
+        {},\t{},\t{}
+        {},\t{},\t{}
+        {},\t{},\t{}
+        """.format(*self.data[0], *self.data[1], *self.data[2])
+
+    def check_win(self, sim):
+        return self.colum_check(sim) or self.row_check(sim) or self.cross_check(sim)
+
+    def game_is_finish(self):
+        return self.check_win(self.crosses) or self.check_win(self.zeros)
+
+    def set_cell(self, a, b, sem):
+        if self.data[b][a] != '':
+            return "cell is not empty"
+        self.data[b][a] = sem
+        print(self.get_image())
+        if self.game_is_finish():
+            return self.who_is_win()
+
+    def set_zero(self, a, b):
+        self.set_cell(a, b, self.zeros)
+
+    def set_cross(self, a, b):
+        self.set_cell(a, b, self.crosses)
+
+    def who_is_win(self):
+        if self.is_play():
+            if self.check_win(self.crosses):
+                return "Crosses win and game"
+            elif self.check_win(self.zeros):
+                return "Zeros win and game"
+            else:
+                return "Game both of them not win"
+        return 'Game not started'
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+tic_tac_toe = TicTacToe()
+print(tic_tac_toe.is_play())
+print(tic_tac_toe.is_empty())
 
+tic_tac_toe.set_cross(1, 1)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+print(tic_tac_toe.is_play())
+print(tic_tac_toe.is_empty())
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+tic_tac_toe.set_zero(2, 0)
+tic_tac_toe.set_zero(2, 1)
+tic_tac_toe.set_zero(2, 2)
