@@ -64,15 +64,22 @@ class TicTacToe(object):
         return self.colum_check(sim) or self.row_check(sim) or self.cross_check(sim)
 
     def game_is_finish(self):
-        return self.check_win(self.crosses) or self.check_win(self.zeros)
+        return self.check_win(self.crosses) or self.check_win(self.zeros) or self.is_cell_full()
+
+    def is_cell_full(self):
+        for row in self.data:
+            for cell in row:
+                if cell == '':
+                    return False
+        return True
 
     def set_cell(self, a, b, sem):
         if self.data[b][a] != '':
-            return "cell is not empty"
+            print("cell is not empty")
         self.data[b][a] = sem
         print(self.get_image())
         if self.game_is_finish():
-            return self.who_is_win()
+            self.who_is_win()
 
     def set_zero(self, a, b):
         self.set_cell(a, b, self.zeros)
@@ -83,12 +90,12 @@ class TicTacToe(object):
     def who_is_win(self):
         if self.is_play():
             if self.check_win(self.crosses):
-                return "Crosses win and game"
+                print("Crosses win and game")
             elif self.check_win(self.zeros):
-                return "Zeros win and game"
+                print("Zeros win and game")
             else:
-                return "Game both of them not win"
-        return 'Game not started'
+                print("Game both of them not win")
+        print('Game not started')
 
 
 tic_tac_toe = TicTacToe()
